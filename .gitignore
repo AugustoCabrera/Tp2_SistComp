@@ -1,12 +1,12 @@
-#Object files
+# Object files
 /*.o
 
 
-#asm files
+# asm files
 /*.a
 
 
-#Shared object files
+# Shared object files
 /*.so
 
 
