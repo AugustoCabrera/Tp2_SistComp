@@ -4,19 +4,16 @@ import ctypes
 def obtener_indice_gini(pais, año):
     url = f'https://api.worldbank.org/v2/en/country/{pais}/indicator/SI.POV.GINI?format=json&date={año}:{año}'
     respuesta = requests.get(url)
-    
+    indice_gini = None
     if respuesta.status_code == 200:
         datos = respuesta.json()[1]
         for dato in datos:
             if dato['countryiso3code'] == pais and dato['date'] == str(año):
                 indice_gini = dato['value']
-                return indice_gini
         print(f"No se encontraron datos para {pais} en el año {año}.")
-        return None
     else:
         print(f"No se pudo obtener el índice GINI para {pais}. Código de estado: {respuesta.status_code}")
-        return None
-
+    return indice_gini
     # Creamos nuestra función factorial en Python
     # hace de Wrapper para llamar a la función de C
 def factorial(num):
