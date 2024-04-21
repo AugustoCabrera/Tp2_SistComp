@@ -13,3 +13,4 @@
 # VS info
 .vscode/
 
+__pycache__/
