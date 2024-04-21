@@ -1,5 +1,5 @@
 # Object files
-/*.o
+*.o
 
 
 # asm files
@@ -13,3 +13,4 @@
 # VS info
 .vscode/
 
+__pycache__/
