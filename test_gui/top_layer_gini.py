@@ -1,8 +1,8 @@
 import sys
+import json
 from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QLabel
 from autocompletion import Widget
-import requests
-import subprocess
+import requests 
 
 countries = {} 
 
@@ -22,29 +22,13 @@ def get_gini_index(country, year):
                 error = f"No se pudo obtener el índice GINI para {country}. Código de estado: {respuesta.status_code}"
     return indice_gini, error
 
-def get_all_countries():
-    base_url = "http://api.worldbank.org/v2/country"
-    params = {
-        "format": "json",
-        "per_page": 50,  # Número de países por página
-        "page": 1  # Página inicial
-    }
+def get_all_countries_from_file(file_path):
+    with open(file_path, 'r') as file:
+        countries_data = json.load(file)
+
     countries_dict = {}
-
-    while True:
-        response = requests.get(base_url, params=params)
-        data = response.json()
-        countries = data[1]
-
-        if not countries:
-            break
-
-        for country in countries:
-            name = country["name"]
-            iso3 = country["id"]
-            countries_dict[name] = iso3
-
-        params["page"] += 1
+    for country_name, iso3_code in countries_data.items():
+        countries_dict[country_name] = iso3_code
 
     return countries_dict
 
@@ -62,7 +46,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     w = QWidget()
 
-    countries = get_all_countries()
+    countries = get_all_countries_from_file("countries.json")
     country_names = list(countries.keys())
     cb = Widget(country_names, parent=w)
     # cb.autocomplete.connectItemSelected(handleItemSelected) # se conecta la seleccion del item
