@@ -6,8 +6,22 @@ from PyQt5.QtCore import Qt
 from autocompletion import Widget
 import matplotlib.pyplot as plt
 import requests 
+import ctypes
 
 countries = {} 
+
+def _float_int(num):
+    # Cargamos la libreria 
+    libprocess = ctypes.CDLL('./libfloat_int.so') #gcc -m32 -shared -o libfloat_int.so float_int.o
+
+    # Definimos los tipos de los argumentos de la función _float_int
+    libprocess._float_int.argtypes = (ctypes.c_float,)
+    
+    # Definimos el tipo del retorno de la función _float_int
+    libprocess._float_int.restype = ctypes.c_int
+
+    # Llamamos a la funyción _float_int
+    return libprocess._float_int(num)
 
 
 def get_gini_index(country, year):
@@ -47,7 +61,8 @@ def get_gini_indices(country, start_year, end_year):
                             else:
                                 gini_indices.append(gini_indices[-1])
                         else:
-                            gini_indices.append(float(value))
+                            value1 = _float_int(float(value))
+                            gini_indices.append(float(value1))
                         gini_found = True
                         break
                 if not gini_found:
@@ -149,3 +164,4 @@ if __name__ == "__main__":
     w.setLayout(layout)
     w.show()
     sys.exit(app.exec_())
+

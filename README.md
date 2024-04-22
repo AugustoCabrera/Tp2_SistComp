@@ -81,25 +81,61 @@ A través de estos diagramas, se obtuvo una visión más clara del camino a segu
 
 - `python3 APIconsumer.py`: Este comando ejecuta el script Python `APIconsumer.py` utilizando Python 3. Ejecutar este script probablemente realizará alguna operación relacionada con consumir una API, como recuperar datos de la web o realizar solicitudes HTTP a un servidor.
 
-##### ` APIconsumer.py ` 
 
 
+## Interfaceando ASM con C
+
+Esta interfaz proporciona una conexión entre un programa en lenguaje C y una función escrita en lenguaje ensamblador NASM (Assembler). La función en ensamblador `_float_int` toma un número en punto flotante (representado como un `float` en C) y devuelve su valor entero + 1.
+
+En el programa en C, se incluye la función `_float_int` como externa. Luego, se define la función `main`, que declara un número en punto flotante `num`, lo pasa a la función `_float_int` y luego imprime el número original junto con su valor entero devuelto por la función ensambladora + 1.
+
+El ensamblador NASM define la función `_float_int`. Primero, guarda el estado del marco actual en la pila (push ebp, mov ebp, esp), luego carga el argumento de punto flotante de la pila (`fld dword [ebp + 8]`) y lo convierte a un entero (`fistp dword [num]`). Luego, incrementa el valor entero en uno y lo devuelve.
+
+El código NASM también utiliza una variable `num` definida en la sección `.data` para almacenar temporalmente el valor entero convertido.
+
+Para compilar este código, primero necesitas compilar el código en C usando GCC y el archivo objeto generado por NASM. Luego, ensamblas el código NASM. El comando de compilación dado para el código C y el ensamblador indica que se está compilando para una arquitectura de 32 bits (`-m32`).
+
+## 32 bits vs 64 bits 
+
+La interfaz entre el ensamblador y C está diseñada para una arquitectura de 32 bits (x86), mientras que el compilador de Python más reciente está optimizado para una arquitectura de 64 bits. Esto genera una discrepancia al intentar combinar estos archivos, ya que operan en arquitecturas diferentes. Para resolver esta discrepancia, se optó por migrar Python a una arquitectura más antigua de 32 bits. Esto permite que tanto la interfaz de ensamblador en C como Python operen en un entorno de 32 bits coherente, facilitando el enlace entre los archivos y garantizando su compatibilidad.
+¿La solución? CONDA.
+
+### CONDA
+
+Conda es una herramienta de gestión de paquetes y un sistema de gestión de entornos ampliamente utilizada en el ecosistema de Python y en otras áreas de desarrollo de software. Su función principal es facilitar la instalación, actualización y administración de paquetes, bibliotecas y dependencias de software, así como la gestión de entornos virtuales.Conda nos permite instalar versiones específicas de Python, incluidas las versiones de 32 bits. Puedes crear un entorno de Conda utilizando una versión de Python de 32 bits, lo que te permite desarrollar y ejecutar tus aplicaciones en un entorno de 32 bits.
 
 
-## What's included
+#### Instalación de Conda para Python de 32 bits
 
-Some text
+### Paso 1: Descargar Miniconda
 
-```text
-folder1/
-└── folder2/
-    ├── folder3/
-    │   ├── file1
-    │   └── file2
-    └── folder4/
-        ├── file3
-        └── file4
+Primero, descarga el archivo de instalación de Miniconda desde la [página oficial de Miniconda](https://docs.anaconda.com/free/miniconda/). Asegúrate de seleccionar la versión adecuada para tu sistema operativo y arquitectura (32 bits).
+
+### Paso 2: Instalación de Miniconda
+
+Una vez descargado el archivo, abre una terminal y navega hasta la carpeta donde se descargó. Luego, ejecuta el siguiente comando para iniciar la instalación:
+
+<p align="center">
+  <a href="https://example.com/">
+    <img src="/image/image4.png" alt="UML">
+  </a>
+</p>
+
+
+```bash
+$ bash Miniconda3-latest-Linux-x86_64.sh
 ```
+
+Se deben seguir todos los pasos que se muestran por consola y aceptar los términos de uso y condiciones de la misma.
+
+Una vez instalado, se debe reiniciar la IDE en la cual se programa para restablecer el bash. Con el comando
+
+```bash
+$ conda
+```
+
+
+
 
 
 
